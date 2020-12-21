@@ -1,0 +1,8 @@
+TEPDB\addDiagnose.class
+TEPDB\PatientDB.class
+TEPDB\TEPDB.class
+TEPDB\User.class
+addPatient.class
+getTepUsers.class
+TEPDB\Patient.class
+TEPDB\UserTepDB.class
