@@ -21,6 +21,36 @@ import java.util.logging.Logger;
  */
 public class PatientDB {
 
+    public static void setDoctor(Patient patient, String doctor) throws ClassNotFoundException, SQLException {
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = TEPDB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE patients SET doctor =").append("'").append(patient.getDoctor()).append("'")
+                    .append(" WHERE ")
+                    .append(" amka = ").append("'").append(patient.getAMKA()).append("';");
+            System.out.println("doctor added " + doctor);
+            System.out.println(patient.getDoctor());
+            stmt.executeUpdate(insQuery.toString());
+            System.out.println("#DB: The doctor was successfully updated in the database.");
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserTepDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            con.close();
+        }
+        return;
+    }
+
     public static Patient getPatientWithAmka(int amka) throws ClassNotFoundException, SQLException {
         Patient patient = new Patient();
 
@@ -34,17 +64,20 @@ public class PatientDB {
 
             StringBuilder insQuery = new StringBuilder();
 
-            insQuery.append("SELECT * FROM patients WHERE amka=" + amka);
+            insQuery.append("SELECT * FROM patients ")
+                    .append(" WHERE ")
+                    .append(" amka = ").append("'").append(amka).append("';");
 
             stmt.execute(insQuery.toString());
             ResultSet res = stmt.getResultSet();
             while (res.next() == true) {
                 patient.setFull_name(res.getString("full_name"));
-                patient.setAMKA(Integer.parseInt(res.getString("amka")));
+                patient.setAMKA(amka);
                 patient.setAddress(res.getString("address"));
                 patient.setDiseases(res.getString("diseases"));
-                patient.setSymptoms(res.getString("symptoms"));
                 patient.setInsurance(res.getString("insurance"));
+                patient.setSymptoms(res.getString("symptoms"));
+                patient.setDoctor("");
             }
 
         } catch (SQLException ex) {
@@ -70,14 +103,15 @@ public class PatientDB {
 
             insQuery.append("INSERT INTO ")
                     .append(" patients (amka, full_name, address, diseases, "
-                            + "insurance,symptoms) ")
+                            + "insurance,symptoms,doctor) ")
                     .append(" VALUES (")
                     .append("'").append(patient.getAMKA()).append("',")
                     .append("'").append(patient.getFull_name()).append("',")
                     .append("'").append(patient.getAddress()).append("',")
                     .append("'").append(patient.getDiseases()).append("',")
                     .append("'").append(patient.getInsurance()).append("',")
-                    .append("'").append(patient.getSymptoms()).append("');");
+                    .append("'").append(patient.getSymptoms()).append("',")
+                    .append("'").append(patient.getDoctor()).append("');");
             PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
             stmtIns.executeUpdate();
 
@@ -108,6 +142,8 @@ public class PatientDB {
                     + " address VARCHAR(255), "
                     + " diseases VARCHAR(255), "
                     + " insurance VARCHAR(255), "
+                    + " symptoms VARCHAR(255), "
+                    + " doctor VARCHAR(255), "
                     + " PRIMARY KEY ( amka ))";
 
             stmt.executeUpdate(sql);

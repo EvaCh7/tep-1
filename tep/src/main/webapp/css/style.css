@@ -1,11 +1,25 @@
-
 body {
-    /*--nav-width: 20px;*/
-    margin: 0 0 0 var(--nav-width);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 20px;
-    background: #f2f2f2;
+    margin:0;
+    padding:0;
+    background-image:  url(hospital.png);
+    background-size: cover;
+    /*background-position: center;*/
+    font-family: sans-serif;
 }
+
+.login-box{
+    width: 320px;
+    height: 420px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
 
 .nav {
     
@@ -23,12 +37,12 @@ body {
     display: inline;
     padding: 12px 18px;
     text-decoration: none;
-    color: white;
+    color: #fff;
     font-weight: 50;
 }
 
 .nav__link:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 #app {
@@ -39,4 +53,7 @@ body {
 
 a {
     color: #009579;
+}
+#submitInfo {
+
 }

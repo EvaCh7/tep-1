@@ -66,29 +66,32 @@ public class addPatient extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Patient patient = new Patient();
-
-        patient.setAMKA(Integer.parseInt(request.getParameter("amka")));
+        int amka = Integer.parseInt(request.getParameter("amka"));
+        patient.setAMKA(amka);
         patient.setAddress(request.getParameter("address"));
         patient.setDiseases(request.getParameter("diseases"));
         patient.setFull_name(request.getParameter("full_name"));
         patient.setInsurance(request.getParameter("insurance"));
         patient.setSymptoms(request.getParameter("symptoms"));
+        patient.setDoctor("");
 
         try {
-            if (PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))) == null) {
+            if (PatientDB.getPatientWithAmka(amka).getAMKA() == 0) {
 
                 PatientDB.insertPatient(patient);
 
                 response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
                 response.setStatus(HttpServletResponse.SC_OK);
                 String res = new Gson().toJson(patient);
+                System.out.println(res);
                 response.getWriter().write(res);
                 response.getWriter().flush();
                 response.getWriter().close();
             } else {
                 response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
-                response.setStatus(HttpServletResponse.SC_OK);
+                response.setStatus(400);
                 String res = new Gson().toJson(PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))));
+                System.out.println(PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))));
                 response.getWriter().write(res);
                 response.getWriter().flush();
                 response.getWriter().close();

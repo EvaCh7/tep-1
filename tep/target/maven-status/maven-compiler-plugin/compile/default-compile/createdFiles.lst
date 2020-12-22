@@ -3,6 +3,7 @@ TEPDB\PatientDB.class
 TEPDB\TEPDB.class
 TEPDB\User.class
 addPatient.class
+setDoctor.class
 getTepUsers.class
 TEPDB\Patient.class
 TEPDB\UserTepDB.class

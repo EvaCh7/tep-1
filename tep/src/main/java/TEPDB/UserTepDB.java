@@ -24,8 +24,8 @@ public class UserTepDB {
         //create a table for users that login
 
 //        PatientDB.createPatientTable();
-//        createUserTable();
-//        insertUser();
+        createUserTable();
+        insertUser();
     }
 
     public static List<User> getUsers() throws ClassNotFoundException, SQLException {
@@ -80,10 +80,24 @@ public class UserTepDB {
                     + "VALUES (202, 'eva', 'employee')";
             stmt.executeUpdate(sql);
             sql = "INSERT INTO Users "
-                    + "VALUES (203, 'emma', 'doctor')";
+                    + "VALUES (203, 'emma', 'pediatrician')";
             stmt.executeUpdate(sql);
             sql = "INSERT INTO Users "
                     + "VALUES(204, 'ellie', 'patient')";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO Users "
+                    + "VALUES (205, 'niki', 'surgeon')";
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO Users "
+                    + "VALUES (206, 'maria', 'cardiologist')";
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO Users "
+                    + "VALUES(207, 'eleni', 'ophthalmologist')";
+
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO Users "
+                    + "VALUES(208, 'lala', 'pathologist')";
             stmt.executeUpdate(sql);
             System.out.println("Inserted records into the table...");
 
@@ -106,6 +120,7 @@ public class UserTepDB {
         System.out.println("Goodbye!");
 
     }
+
 
     public static void createUserTable() throws ClassNotFoundException, SQLException {
         Statement stmt = null;

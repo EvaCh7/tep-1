@@ -17,6 +17,7 @@ public class Patient {
     private String diseases;    // (could be encrypted in md5)
     private String insurance;
     private String symptoms;
+    private String doctor;
 
     /**
      * Default Constructor
@@ -29,17 +30,20 @@ public class Patient {
         this.insurance = "";
         this.symptoms = "";
         this.amka = 0;
+        this.doctor = "";
     }
 
     public Patient(String address,
             String diseases,
-            String full_name, String insurance, int amka, String symptoms) {
+            String full_name, String insurance, int amka, String symptoms, String doctor) {
         this.address = address;
         this.diseases = diseases;
         this.full_name = full_name;
         this.insurance = insurance;
         this.symptoms = symptoms;
         this.amka = amka;
+        this.doctor = doctor;
+
     }
 
     public String getAddress() {
@@ -48,6 +52,14 @@ public class Patient {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
     }
 
     /**
