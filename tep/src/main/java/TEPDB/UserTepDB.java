@@ -24,8 +24,9 @@ public class UserTepDB {
         //create a table for users that login
 
 //        PatientDB.createPatientTable();
-        createUserTable();
-        insertUser();
+//        PatientDB.createExaminationTable();
+        //        createUserTable();
+//        insertUser();
     }
 
     public static List<User> getUsers() throws ClassNotFoundException, SQLException {
@@ -120,7 +121,6 @@ public class UserTepDB {
         System.out.println("Goodbye!");
 
     }
-
 
     public static void createUserTable() throws ClassNotFoundException, SQLException {
         Statement stmt = null;

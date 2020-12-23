@@ -16,8 +16,10 @@ public class Patient {
     private String address;
     private String diseases;    // (could be encrypted in md5)
     private String insurance;
+    private String selected_symptoms;
     private String symptoms;
     private String doctor;
+    private String report;
 
     /**
      * Default Constructor
@@ -28,23 +30,36 @@ public class Patient {
         this.diseases = "";
         this.full_name = "";
         this.insurance = "";
+        this.selected_symptoms = "";
         this.symptoms = "";
         this.amka = 0;
         this.doctor = "";
+        this.report = "";
     }
 
     public Patient(String address,
             String diseases,
-            String full_name, String insurance, int amka, String symptoms, String doctor) {
+            String full_name, String insurance, int amka, String selected_symptoms, String symptoms, String doctor, String report) {
         this.address = address;
         this.diseases = diseases;
         this.full_name = full_name;
         this.insurance = insurance;
+        this.selected_symptoms = selected_symptoms;
         this.symptoms = symptoms;
         this.amka = amka;
         this.doctor = doctor;
+        this.report = report;
 
     }
+
+    public String getReport() {
+        return report;
+    }
+
+    public void setReport(String report) {
+        this.report = report;
+    }
+
 
     public String getAddress() {
         return address;
@@ -115,11 +130,6 @@ public class Patient {
         return symptoms;
     }
 
-    /**
-     * Sets the first name
-     *
-     * @param firstName
-     */
     public void setSymptoms(String symptoms) {
         this.symptoms = symptoms;
     }
@@ -128,26 +138,19 @@ public class Patient {
         return amka;
     }
 
-    /**
-     * Sets the first name
-     *
-     * @param firstName
-     */
     public void setAMKA(int amka) {
         this.amka = amka;
     }
 
 
-//        /**
-//         * Returns string representation of value
-//         *
-//         * @return
-//         */
-//        @Override
-//        public String toString() {
-//            return this.value;
-//        }
-//    }
+    public String getSelectedSymptoms() {
+        return selected_symptoms;
+    }
+
+    public void setSelectedSymptoms(String selected_symptoms) {
+        this.selected_symptoms = selected_symptoms;
+    }
+
     @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.

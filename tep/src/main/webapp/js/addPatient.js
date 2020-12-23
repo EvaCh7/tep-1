@@ -9,11 +9,11 @@ function addPatient() {
     data.append('amka', $("#AMKA").val());
     data.append('insurance', $("#insurance").val());
     data.append('diseases', $("#chDisease").val());
-    data.append('symptoms', $("#symptoms option:selected").text());
+    data.append('selected_symptoms', selected);
+    data.append('symptoms', $("#moresymptoms").val());
 
     ajaxRequest('POST', 'http://localhost:8080/tep/addPatient', data, function (o) {
         var res = JSON.parse(o.responseText);
-        console.lo
         $('#content_page').load('patientinfo.html', function () {
             $("#FName").val(res.full_name)
             $("#address").val(res.address);
@@ -21,10 +21,7 @@ function addPatient() {
             $("#insurance").val(res.insurance);
             $("#chDisease").val(res.diseases);
             $("#symptoms").val(selected);
-
-
-
-
+            $("#moresymptoms").val($("#moresymptoms").val());
 
             if (selected == 1)
                 $("#doctor").val("Surgeon");
@@ -61,11 +58,23 @@ function addPatient() {
             data1.append('amka', $("#AMKA").val());
             ajaxRequest('POST', 'http://localhost:8080/tep/setDoctor', data1, function (o) {});
 
-            $('#doctor').css('display', 'inline');
-            $('#doctorlabel').css('display', 'inline');
             $("#message").html("Succesfully added the patient");
             $('#message').css('color', 'green');
+            $('#doctor').css('display', 'inline');
+            $('#doctorlabel').css('display', 'inline');
             $('#submitpatient').css('display', 'none');
+            $('#submitdiagnose').css('display', 'none');
+            $('#submitexam').css('display', 'none');
+            $('#therapy').css('display', 'none');
+            $('#diagnose').css('display', 'none');
+            $('#therapylabel').css('display', 'none');
+            $('#diagnoselabel').css('display', 'none');
+            $('#prescription').css('display', 'none');
+            $('#examinations').css('display', 'none');
+            $('#prescriptionlabel').css('display', 'none');
+            $('#examinationslabel').css('display', 'none');
+            $('#report').css('display', 'none');
+            $('#reportlabel').css('display', 'none');
 
 
         });
@@ -80,26 +89,61 @@ function addPatient() {
                 $("#AMKA").val(res.amka);
                 $("#insurance").val(res.insurance);
                 $("#chDisease").val(res.diseases);
-                $("#symptoms").val(res.symptoms);
-                $("#message").html("Patient already exists");
-                $('#message').css('color', 'red');
-                if (selected == 1 || selected == 2 || selected == 3) {
+                $("#symptoms").val(selected);
+                $("#moresymptoms").val($("#moresymptoms").val());
+
+                if (selected == 1)
                     $("#doctor").val("Surgeon");
-                } else if (selected == 4) {
+                else if (selected == 2)
+                    $("#doctor").val("Surgeon");
+                else if (selected == 3)
+                    $("#doctor").val("Surgeon");
+                else if (selected == 4)
                     $("#doctor").val("Pediatrician");
-                } else if (selected == 5 || selected == 6 || selected == 7) {
+                else if (selected == 5)
                     $("#doctor").val("Ophthalmologist");
-                } else if (selected == 8 || selected == 9 || selected == 10) {
+                else if (selected == 6)
+                    $("#doctor").val("Ophthalmologist");
+                else if (selected == 7)
+                    $("#doctor").val("Ophthalmologist");
+
+                else if (selected == 8)
                     $("#doctor").val("Pathologist");
-                } else if (selected == 11 || selected == 12) {
+
+                else if (selected == 9)
+                    $("#doctor").val("Pathologist");
+
+                else if (selected == 10)
+                    $("#doctor").val("Pathologist");
+
+                else if (selected == 11)
                     $("#doctor").val("Orthopedician");
-                }
+
+                else if (selected == 12)
+                    $("#doctor").val("Orthopedician");
+
+                var data1 = new FormData();
+                data1.append('doctor', $("#doctor").val());
+                data1.append('amka', $("#AMKA").val());
+                ajaxRequest('POST', 'http://localhost:8080/tep/setDoctor', data1, function (o) {});
+
                 $('#doctor').css('display', 'inline');
                 $('#doctorlabel').css('display', 'inline');
-                $("#message").html("Succesfully added the patient");
-                $('#message').css('color', 'green');
-                $('#submitpatient').css('display', 'none');
-
+                $("#message").html("Patient's folder already exist");
+                $('#message').css('color', 'red');
+                $('#submitpatient').css('display', 'inline');
+                $('#submitdiagnose').css('display', 'none');
+                $('#submitexam').css('display', 'none');
+                $('#therapy').css('display', 'none');
+                $('#diagnose').css('display', 'none');
+                $('#therapylabel').css('display', 'none');
+                $('#diagnoselabel').css('display', 'none');
+                $('#prescription').css('display', 'none');
+                $('#examinations').css('display', 'none');
+                $('#prescriptionlabel').css('display', 'none');
+                $('#examinationslabel').css('display', 'none');
+                $('#report').css('display', 'none');
+                $('#reportlabel').css('display', 'none');
 
 
             });
@@ -110,6 +154,42 @@ function addPatient() {
 }
 
 
+function getPatient() {
+
+    var data = new FormData();
+    data.append('doctor', "Surgeon");
+
+    ajaxRequest('GET', 'http://localhost:8080/tep/getPatient', data, function (ο) {
+        var res = JSON.parse(ο.responseText);
+        $("#FName").val(res.full_name);
+        $("#AMKA").val(res.amka);
+        $("#insurance").val(res.insurance);
+        $("#chDisease").val(res.diseases);
+        $('#symptoms').val(res.selected_symptoms);
+        $("#moresymptoms").val(res.symptoms);
+        var data1 = new FormData();
+        data1.append('amka', res.amka);
+        ajaxRequest('GET', 'http://localhost:8080/tep/getExam', data1, function (ο) {
+            var res1 = JSON.parse(ο.responseText);
+            $("#diagnose").val(res1.diagnose);
+            $("#examinations").val(res1.exam_order);
+
+        });
+
+
+        if (res.report != "") {
+            $('#report').val(res.report);
+        } else {
+
+            $('#reportlabel').css('display', 'none');
+            $('#report').css('display', 'none');
+        }
+        $('#submitexam').css('display', 'none');
+
+    });
+
+}
+
 
 function getUsers() {
     var data = new FormData();
@@ -118,6 +198,19 @@ function getUsers() {
         var res = JSON.parse(ο.responseText);
         if (res == "patient") {
             $('#addPatient').css('display', 'inline');
+            $('#seePatients').css('display', 'none');
+            $('#logout').css('display', 'inline');
+            $('#signin').css('display', 'none');
+        } else if (res == "surgeon") {
+            $('#addPatient').css('display', 'none');
+            $('#seePatients').css('display', 'inline');
+            $('#logout').css('display', 'inline');
+            $('#signin').css('display', 'none');
+        } else if (res == "nurse") {
+
+            $('#searchPatient').css('display', 'inline');
+            $('#seePatients').css('display', 'none');
+            $('#addPatient').css('display', 'none');
             $('#logout').css('display', 'inline');
             $('#signin').css('display', 'none');
         }

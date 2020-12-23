@@ -72,8 +72,11 @@ public class addPatient extends HttpServlet {
         patient.setDiseases(request.getParameter("diseases"));
         patient.setFull_name(request.getParameter("full_name"));
         patient.setInsurance(request.getParameter("insurance"));
+        patient.setSelectedSymptoms(request.getParameter("selected_symptoms"));
         patient.setSymptoms(request.getParameter("symptoms"));
         patient.setDoctor("");
+        patient.setReport("");
+
 
         try {
             if (PatientDB.getPatientWithAmka(amka).getAMKA() == 0) {
@@ -83,7 +86,6 @@ public class addPatient extends HttpServlet {
                 response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
                 response.setStatus(HttpServletResponse.SC_OK);
                 String res = new Gson().toJson(patient);
-                System.out.println(res);
                 response.getWriter().write(res);
                 response.getWriter().flush();
                 response.getWriter().close();
@@ -91,7 +93,7 @@ public class addPatient extends HttpServlet {
                 response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
                 response.setStatus(400);
                 String res = new Gson().toJson(PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))));
-                System.out.println(PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))));
+//                System.out.println(PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka"))));
                 response.getWriter().write(res);
                 response.getWriter().flush();
                 response.getWriter().close();
@@ -99,7 +101,6 @@ public class addPatient extends HttpServlet {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException ex) {
-            System.out.println("mphke sto error2");
 
             Logger.getLogger(addPatient.class.getName()).log(Level.SEVERE, null, ex);
         }
