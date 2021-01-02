@@ -4,69 +4,22 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <script src="js/face.js"></script> -->
-        <style>
-            body {  text-align: center; font-family: 'Quicksand', sans-serif;}
-            form {border: 3px solid #f1f1f1;}
-
-            input[type=text], input[type=password] {
-                text-align: center;
-                width: 100%;
-                padding: 20px 40px;
-                margin: 5px 0;
-                display: inline-block;
-                border: 1px solid #ccc;
-                box-sizing: border-box;
-            }
-
-            button {
-                background-color: #3399ff;
-                color: white;
-                padding: 14px 20px;
-                margin: 8px 0;
-                border: none;
-                cursor: pointer;
-                width: 100%;
-            }
-
-            button:hover {
-                opacity: 0.8;
-            }
-
-
-            .container {
-                text-align: center;
-                width: 400px;
-                height: auto;
-                margin:auto;
-            }
-
-            span.psw {
-                text-align: center;
-                float: right;
-                padding-top: 16px;
-            }
-            @media screen and (max-width: 300px) {
-                span.psw {
-                    display: block;
-                    float: none;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="css/signin.css">
     </head>
 
-    <body>
-        <h2  id="signinlabel">Sign in</h2>
+       <body>
+        <div class="container">
+            <div class="signIn"><h2 id="signinlabel">Sign in</h2></div>
 
-<!--        <form>-->
-            <div class="container">
-
+            <div class ="main">
                 <label for="username"><b>Username</b></label>
-                <input id="username" type="text" placeholder="Enter Username" value="theo"  required>
+                <input id="username" type="text" placeholder="Enter Username" value="theo" required>
                 <label for="psw"><b>Password</b></label>
-                <input id="psw" type="password" placeholder="Enter Password" name="psw" value="203" required>  
+                <input id="psw" type="password" placeholder="Enter Password" name="psw" value="203" required>
                 <div id="signInerror" class="signInerror" style="color:red"></div>
                 <button type="submit" id="signinbtn">Sign in</button>
             </div>
-        <!--</form>-->
+
+        </div>
     </body>
 </html>

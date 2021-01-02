@@ -4,12 +4,15 @@
  * and open the template in the editor.
  */
 
-import TEPDB.Examinations;
-import TEPDB.Patient;
-import TEPDB.PatientDB;
+import TEPDB.Shift;
+import TEPDB.ShiftDB;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -17,14 +20,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
 
 /**
  *
  * @author theodora
  */
-@WebServlet(urlPatterns = {"/addReport"})
-public class addReport extends HttpServlet {
+@WebServlet(urlPatterns = {"/seeShift"})
+public class seeShift extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,16 +39,13 @@ public class addReport extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
-
-        Patient patient = PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka")));
-        patient.setReport(request.getParameter("report"));
-        PatientDB.setReportToPatient(patient, request.getParameter("report"));
-        Examinations exam = PatientDB.getExam(Integer.parseInt(request.getParameter("amka")));
-        exam.setReport(request.getParameter("report"));
-        PatientDB.setReport(exam, request.getParameter("report"));
-        response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        String res = new Gson().toJson(exam);
+        List<Shift> shifts = new ArrayList();
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(date);
+        shifts = ShiftDB.getShiftByDate(strDate);
+        String res = new Gson().toJson(shifts);
+        System.out.println(res);
         response.getWriter().write(res);
         response.getWriter().flush();
         response.getWriter().close();
@@ -67,9 +66,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(seeShift.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(seeShift.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -87,9 +86,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(seeShift.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(seeShift.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

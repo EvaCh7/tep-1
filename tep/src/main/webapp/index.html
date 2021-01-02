@@ -14,6 +14,8 @@
             <!--<a  class="nav__link" id="home" data-link onclick=" return homeClicked()">Home</a>-->
             <a  class="nav__link" id="signin" onclick="return signInClicked()" data-link >Sign In</a>
             <a  class="nav__link" id="logout" onclick="return logOutClicked()" data-link >Log out</a>
+            <a  class="nav__link" id="addShift" onclick="return addShiftClicked()" data-link >Add Shift</a>
+            <a  class="nav__link" id="seeShift" onclick="return seeShiftClicked()" data-link >See Shift</a>
             <a  class="nav__link" id="searchPatient" onclick="searchPatientInfoClicked()" style="text-align: left" data-link>Search Patient</a>
 
             <a  class="nav__link" id="addPatient" onclick="addPatientInfoClicked()" style="text-align: left" data-link>Add Patient's Info</a>
@@ -24,12 +26,13 @@
         </nav>
 
         <div id="display_content">
-            <div id="content_page"></div>
+            <ul class="list-group align-items-center" id="shiftlist"></ul>
+
+                <div id="content_page"></div>
         </div>
 
         <script  src="js/addPatient.js"></script>
         <script  src="js/doctors.js"></script>
-
         <script  src="js/init.js"></script>
     </body>
 </html>

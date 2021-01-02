@@ -9,6 +9,8 @@ import TEPDB.PatientDB;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -36,9 +38,15 @@ public class addDiagnose extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
+        boolean flag = true;
         Examinations exam = new Examinations();
         int amka = Integer.parseInt(request.getParameter("amka"));
         exam.setAMKA(amka);
+        exam.setAMKA(amka);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(date);
+        exam.setDate(strDate);
         exam.setDiagnose(request.getParameter("diagnose"));
         exam.setExam_order(request.getParameter("exam_order"));
         if (request.getParameter("prescription") == "") {
@@ -56,12 +64,16 @@ public class addDiagnose extends HttpServlet {
         if (request.getParameter("therapy") == "") {
             exam.setTherapy("");
         } else {
+            flag = false;
             exam.setTherapy(request.getParameter("therapy"));
+        }
+        if (flag == true) {
+            PatientDB.insertExaminations(exam);
+        } else {
             PatientDB.setTherapy(exam, request.getParameter("therapy"));
+            System.out.println(exam.getTherapy());
 
         }
-        System.out.println(exam.getTherapy());
-        PatientDB.insertExaminations(exam);
         response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
         response.setStatus(200);
         String res = new Gson().toJson(exam);

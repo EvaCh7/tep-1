@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 
-import TEPDB.Examinations;
-import TEPDB.Patient;
-import TEPDB.PatientDB;
+import TEPDB.Shift;
+import TEPDB.ShiftDB;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,8 +22,8 @@ import javax.ws.rs.core.HttpHeaders;
  *
  * @author theodora
  */
-@WebServlet(urlPatterns = {"/addReport"})
-public class addReport extends HttpServlet {
+@WebServlet(urlPatterns = {"/addShift"})
+public class addShift extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,16 +36,18 @@ public class addReport extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
+        Shift shift = new Shift();
+        shift.setAT(request.getParameter("AT"));
+        shift.setDate(request.getParameter("date"));
+        shift.setFull_name(request.getParameter("full_name"));
+        shift.setHours(request.getParameter("hours"));
+        shift.setProfession(request.getParameter("profession"));
 
-        Patient patient = PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka")));
-        patient.setReport(request.getParameter("report"));
-        PatientDB.setReportToPatient(patient, request.getParameter("report"));
-        Examinations exam = PatientDB.getExam(Integer.parseInt(request.getParameter("amka")));
-        exam.setReport(request.getParameter("report"));
-        PatientDB.setReport(exam, request.getParameter("report"));
+        ShiftDB.insertShift(shift);
         response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        String res = new Gson().toJson(exam);
+        String res = new Gson().toJson(shift);
+        System.out.println(res);
         response.getWriter().write(res);
         response.getWriter().flush();
         response.getWriter().close();
@@ -67,9 +68,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(addShift.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(addShift.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -87,9 +88,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(addShift.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(addShift.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

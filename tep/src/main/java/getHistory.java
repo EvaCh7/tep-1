@@ -5,11 +5,11 @@
  */
 
 import TEPDB.Examinations;
-import TEPDB.Patient;
 import TEPDB.PatientDB;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -23,8 +23,8 @@ import javax.ws.rs.core.HttpHeaders;
  *
  * @author theodora
  */
-@WebServlet(urlPatterns = {"/addReport"})
-public class addReport extends HttpServlet {
+@WebServlet(urlPatterns = {"/getHistory"})
+public class getHistory extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,18 +38,14 @@ public class addReport extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
 
-        Patient patient = PatientDB.getPatientWithAmka(Integer.parseInt(request.getParameter("amka")));
-        patient.setReport(request.getParameter("report"));
-        PatientDB.setReportToPatient(patient, request.getParameter("report"));
-        Examinations exam = PatientDB.getExam(Integer.parseInt(request.getParameter("amka")));
-        exam.setReport(request.getParameter("report"));
-        PatientDB.setReport(exam, request.getParameter("report"));
+        List<Examinations> exams = PatientDB.getHistory(Integer.parseInt(request.getParameter("amka")));
         response.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        String res = new Gson().toJson(exam);
+        String res = new Gson().toJson(exams);
         response.getWriter().write(res);
         response.getWriter().flush();
         response.getWriter().close();
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,9 +63,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getHistory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getHistory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -87,9 +83,9 @@ public class addReport extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getHistory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addReport.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getHistory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

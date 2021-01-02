@@ -1,6 +1,6 @@
 'user strict';
 
-
+let user = "none";
 function addPatient() {
     var selected = $("#symptoms :selected").val(); // The value of the selected option
     var data = new FormData();
@@ -58,6 +58,7 @@ function addPatient() {
             data1.append('amka', $("#AMKA").val());
             ajaxRequest('POST', 'http://localhost:8080/tep/setDoctor', data1, function (o) {});
 
+
             $("#message").html("Succesfully added the patient");
             $('#message').css('color', 'green');
             $('#doctor').css('display', 'inline');
@@ -90,7 +91,8 @@ function addPatient() {
                 $("#insurance").val(res.insurance);
                 $("#chDisease").val(res.diseases);
                 $("#symptoms").val(selected);
-                $("#moresymptoms").val($("#moresymptoms").val());
+                $("#moresymptoms").val(res.symptoms);
+
 
                 if (selected == 1)
                     $("#doctor").val("Surgeon");
@@ -126,6 +128,27 @@ function addPatient() {
                 data1.append('doctor', $("#doctor").val());
                 data1.append('amka', $("#AMKA").val());
                 ajaxRequest('POST', 'http://localhost:8080/tep/setDoctor', data1, function (o) {});
+                ajaxRequest('GET', 'http://localhost:8080/tep/getHistory', data1, function (o) {
+                    var history = JSON.parse(o.responseText);
+                    var content = "<table><tr><th>Diagnose</th><th>Prescription</th><th>Therapy</th><th>Date</th></tr>"
+
+
+                    for (i = 0; i < history.length; i++) {
+
+                        content += '<tr>';
+                        content += '<td>' + history[i].diagnose + '</td>';
+                        content += '<td>' + history[i].prescription + '</td>';
+                        content += '<td>' + history[i].therapy + '</td>';
+                        content += '<td>' + history[i].date + '</td>';
+                        content += '</tr>';
+
+                    }
+                    content += "</table>"
+                    console.log(content)
+                    $('#history').append(content);
+                });
+
+
 
                 $('#doctor').css('display', 'inline');
                 $('#doctorlabel').css('display', 'inline');
@@ -154,10 +177,49 @@ function addPatient() {
 }
 
 
-function getPatient() {
-
+function addShift() {
     var data = new FormData();
-    data.append('doctor', "Surgeon");
+    data.append('AT', $('#AT').val());
+    data.append('full_name', $('#FullNameShift').val());
+    data.append('profession', $('#profession').val());
+    data.append('date', $('#date').val());
+    data.append('hours', $('#shiftTime').val());
+
+    ajaxRequest('POST', 'http://localhost:8080/tep/addShift', data, function (ο) {
+        var res = JSON.parse(ο.responseText);
+        console.log(res);
+
+    });
+}
+
+function seeShift() {
+    ajaxRequest('GET', 'http://localhost:8080/tep/seeShift', undefined, function (ο) {
+        var res = JSON.parse(ο.responseText);
+        $('#content_page').empty();
+        var content = "<table style=" + "background:blue;" + "><tr><th>Name</th><th>Profession</th><th>Hours</th><th>Date</th></tr>"
+        for (i = 0; i < res.length; i++) {
+            content += '<tr>';
+            content += '<td>' + res[i].full_name + '</td>';
+            content += '<td>' + res[i].profession + '</td>';
+            content += '<td>' + res[i].hours + '</td>';
+            content += '<td>' + res[i].date + '</td>';
+            content += '</tr>';
+
+        }
+        content += "</table>"
+        $('#content_page').append(content);
+    });
+}
+
+function getPatient() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+    var data = new FormData();
+    data.append('doctor', user);
 
     ajaxRequest('GET', 'http://localhost:8080/tep/getPatient', data, function (ο) {
         var res = JSON.parse(ο.responseText);
@@ -171,16 +233,21 @@ function getPatient() {
         data1.append('amka', res.amka);
         ajaxRequest('GET', 'http://localhost:8080/tep/getExam', data1, function (ο) {
             var res1 = JSON.parse(ο.responseText);
+            if (res.date == today) {
             $("#diagnose").val(res1.diagnose);
             $("#examinations").val(res1.exam_order);
-
+            } else {
+                $("#diagnose").val("");
+                $("#examinations").val("");
+            }
         });
 
 
-        if (res.report != "") {
+
+
+        if (res.report != "" && res.date == today) {
             $('#report').val(res.report);
         } else {
-
             $('#reportlabel').css('display', 'none');
             $('#report').css('display', 'none');
         }
@@ -196,23 +263,37 @@ function getUsers() {
     data.append('username', $("#username").val());
     ajaxRequest('GET', 'http://localhost:8080/tep/getTepUsers', data, function (ο) {
         var res = JSON.parse(ο.responseText);
+        user = res;
         if (res == "patient") {
             $('#addPatient').css('display', 'inline');
             $('#seePatients').css('display', 'none');
             $('#logout').css('display', 'inline');
             $('#signin').css('display', 'none');
-        } else if (res == "surgeon") {
+            $('#addShift').css('display', 'none');
+            $('#seeShift').css('display', 'inline');
+        } else if (res == "surgeon" || res == "pediatrician" || res == "cardiologist" || res == "ophthalmologist" || res == "pathologist") {
             $('#addPatient').css('display', 'none');
             $('#seePatients').css('display', 'inline');
             $('#logout').css('display', 'inline');
             $('#signin').css('display', 'none');
+            $('#addShift').css('display', 'none');
+            $('#seeShift').css('display', 'inline');
         } else if (res == "nurse") {
-
             $('#searchPatient').css('display', 'inline');
             $('#seePatients').css('display', 'none');
             $('#addPatient').css('display', 'none');
             $('#logout').css('display', 'inline');
             $('#signin').css('display', 'none');
+            $('#addShift').css('display', 'none');
+            $('#seeShift').css('display', 'inline');
+        } else if (res == "employee") {
+            $('#searchPatient').css('display', 'none');
+            $('#seePatients').css('display', 'none');
+            $('#addPatient').css('display', 'none');
+            $('#logout').css('display', 'inline');
+            $('#signin').css('display', 'none');
+            $('#addShift').css('display', 'inline');
+            $('#seeShift').css('display', 'inline');
         }
     });
 }

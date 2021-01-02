@@ -53,9 +53,6 @@ function searchPatient() {
             $('#examinationslabel').css('display', 'inline-block');
             $('#submitdiagnose').css('display', 'none');
             $('#submitexams').css('display', 'inline-block');
-
-
-            console.log(res);
         });
 
     });

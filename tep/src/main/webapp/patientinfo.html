@@ -5,7 +5,12 @@
         <style>
             body {  text-align: center; font-family: 'Trebuchet MS', sans-serif;}
             form {border: 3px solid #f1f1f1;}
-
+            
+            .history {
+                position: absolute;
+                left: 50%;
+                top:110%;
+            }
             input[type=text]{
                 text-align: center;
                 width: 40%;
@@ -49,7 +54,7 @@
             <label for="chDisease" id="chDiseaselabel"><b>Chronic Diseases</b></label><br>
             <input type="text" id="chDisease" name="chDisease"><br>
             <p id="symptomslabel">Symptoms</p>
-                <select id="symptoms" name="Symptoms">
+            <select id="symptoms" name="Symptoms">
                 <option  value="1">Accident</option>
                 <option  value="2">Stitches</option>
                 <option  value="3">Other issue with wound</option>
@@ -63,11 +68,13 @@
                 <option  value="11">Bone pain</option>
                 <option  value="12">Other orthopedic issues</option>
             </select><br>
-              <label for="moresymptoms" id="moresymptomslabel"><b>More about the symptoms</b></label><br>
+            <label for="moresymptoms" id="moresymptomslabel"><b>More about the symptoms</b></label><br>
             <input type="text" id="moresymptoms" name="moresymptoms"><br>
             <label for="doctor" id="doctorlabel"><b>Doctor</b></label><br>
             <input type="text" id="doctor" name="doctor" readonly><br>
-             <label for="diagnose" id="diagnoselabel"><b>Diagnose</b></label><br>
+            <div class="history" id="history"></div>
+
+            <label for="diagnose" id="diagnoselabel"><b>Diagnose</b></label><br>
             <input type="text" id="diagnose" name="diagnose" ><br>
             <label for="examination" id="examinationslabel"><b>Examinations</b></label><br>
             <input type="text" id="examinations" name="examinations" ><br>
@@ -75,10 +82,11 @@
             <input type="text" id="report" name="report" ><br>
             <label for="prescription" id="prescriptionlabel"><b>Prescription</b></label><br>
             <input type="text" id="prescription" name="prescription" ><br>
-            
-              <label for="therapy" id="therapylabel"><b>Therapy</b></label><br>
+
+            <label for="therapy" id="therapylabel"><b>Therapy</b></label><br>
             <input type="text" id="therapy" name="therapy" ><br>
             <div id="message"></div>
+
         </div>
         <button type="submit" id="submitdiagnose">Submit Diagnose</button>
         <button type="submit" id="submitexam">Submit Exam</button>

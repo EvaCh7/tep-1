@@ -17,6 +17,7 @@ public class Examinations {
     private String prescription;
     private String report;
     private String therapy;
+    private String date;
 
     /**
      * Default Constructor
@@ -29,18 +30,20 @@ public class Examinations {
         this.report = "";
         this.therapy = "";
         this.amka = 0;
+        this.date = "";
+
     }
 
     public Examinations(String diagnose,
             String exam_order,
-            String prescription, String report, int amka, String therapy) {
+            String prescription, String report, int amka, String therapy, String date) {
         this.diagnose = diagnose;
         this.exam_order = exam_order;
         this.prescription = prescription;
         this.report = report;
         this.therapy = therapy;
         this.amka = amka;
-
+        this.date = date;
     }
 
     public String getReport() {
@@ -49,6 +52,14 @@ public class Examinations {
 
     public void setReport(String report) {
         this.report = report;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getDiagnose() {

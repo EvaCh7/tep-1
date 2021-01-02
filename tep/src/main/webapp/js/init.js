@@ -9,6 +9,8 @@ function logOutClicked() {
     $('#signin').css('display', 'inline');
     $('#seePatients').css('display', 'none');
     $('#content_page').load('signin.html');
+    $('#addShift').css('display', 'none');
+    $('#seeShift').css('display', 'none');
 }
 
 
@@ -31,6 +33,13 @@ function addPatientInfoClicked() {
     });
 }
 
+function addShiftClicked() {
+    $('#content_page').load('addShift.html');
+}
+
+function seeShiftClicked() {
+    seeShift();
+}
 
 function seePatientsClicked() {
     $('#content_page').load('patientinfo.html', function () {
@@ -47,12 +56,34 @@ function seePatientsClicked() {
 }
 
 function searchPatientInfoClicked() {
-    $('#content_page').load('searchAmka.html');
+    $('#content_page').load('searchAmka.html', function () {
+        ajaxRequest('GET', 'http://localhost:8080/tep/getAllPatientsForExams', undefined, function (ο) {
+            var res = JSON.parse(ο.responseText);
+            var content = "<table><tr><th>AMKA</th><th>Exam</th></tr>"
+            for (i = 0; i < res.length; i++) {
+                content += '<tr>';
+                content += '<td>' + res[i].amka + '</td>';
+                content += '<td>' + res[i].exam_order + '</td>';
+                content += '<td>' + res[i].date + '</td>';
+                content += '</tr>';
+            }
+            content += "</table>"
+            $('#showPatients').append(content);
+        });
+
+    });
 }
 
+
+
+window.addEventListener('load', (event) => {
+    $('#content_page').load('signin.html');
+});
 $('#searchPatient').css('display', 'none');
 $('#seePatients').css('display', 'none');
 $('#addPatient').css('display', 'none');
+$('#addShift').css('display', 'none');
+$('#seeShift').css('display', 'none');
 $('#logout').css('display', 'none');
 
 
@@ -76,4 +107,10 @@ $(document).on('DOMNodeInserted', function (e) {
     if ($(e.target).hasClass('searchamkadiv')) {
         $('#searchbtn').on('click', searchPatient);
     }
+});
+
+
+$(document).on('DOMNodeInserted', function (e) {
+    $('#shiftbtn').on('click', addShift);
+
 });

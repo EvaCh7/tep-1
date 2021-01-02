@@ -1,12 +1,18 @@
 body {
     margin:0;
     padding:0;
-    background-image:  url(hospital.png);
+    background-image:  url(Medical.png);
     background-size: cover;
     /*background-position: center;*/
     font-family: sans-serif;
 }
 
+.history {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .login-box{
     width: 320px;
     height: 420px;
@@ -22,7 +28,7 @@ body {
 
 
 .nav {
-    
+
     text-align: right;
     /* position: fixed; */
     top: 0;

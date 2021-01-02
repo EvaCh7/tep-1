@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +22,98 @@ import java.util.logging.Logger;
  * @author theodora
  */
 public class PatientDB {
+
+    public static List<Examinations> getPatientsForExam() throws ClassNotFoundException, SQLException {
+        List<Examinations> exams = new ArrayList();
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = TEPDB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM examinations")
+                    .append(" WHERE ")
+                    .append(" exam_order IS NOT NULL").append(";");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            while (res.next() == true) {
+                Examinations exam = new Examinations();
+
+                exam.setAMKA(Integer.parseInt(res.getString("amka")));
+                exam.setDiagnose(res.getString("diagnose"));
+                exam.setExam_order(res.getString("exam_order"));
+                exam.setPrescription(res.getString("prescription"));
+                exam.setReport(res.getString("report"));
+                exam.setTherapy(res.getString("therapy"));
+                exam.setTherapy(res.getString("date"));
+                exams.add(exam);
+
+            }
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserTepDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            con.close();
+        }
+
+        return exams;
+    }
+
+    public static List<Examinations> getHistory(int amka) throws ClassNotFoundException, SQLException {
+        List<Examinations> exams = new ArrayList();
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = TEPDB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM examinations")
+                    .append(" WHERE ")
+                    .append(" amka = ").append("'").append(amka).append("';");
+
+            stmt.execute(insQuery.toString());
+
+            ResultSet res = stmt.getResultSet();
+
+            while (res.next() == true) {
+                Examinations exam = new Examinations();
+
+                exam.setAMKA(Integer.parseInt(res.getString("amka")));
+                exam.setDiagnose(res.getString("diagnose"));
+                exam.setExam_order(res.getString("exam_order"));
+                exam.setPrescription(res.getString("prescription"));
+                exam.setReport(res.getString("report"));
+                exam.setTherapy(res.getString("therapy"));
+                exam.setDate(res.getString("date"));
+                exams.add(exam);
+
+            }
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserTepDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            con.close();
+        }
+
+        return exams;
+    }
 
     public static Examinations getExam(int amka) throws ClassNotFoundException, SQLException {
         Examinations exam = new Examinations();
@@ -49,6 +143,7 @@ public class PatientDB {
                 exam.setPrescription(res.getString("prescription"));
                 exam.setReport(res.getString("report"));
                 exam.setTherapy(res.getString("therapy"));
+                exam.setTherapy(res.getString("date"));
 
             }
 
@@ -76,14 +171,15 @@ public class PatientDB {
 
             insQuery.append("INSERT INTO ")
                     .append(" examinations (amka, diagnose, exam_order, prescription, "
-                            + "report,therapy) ")
+                            + "report,therapy,date) ")
                     .append(" VALUES (")
                     .append("'").append(exam.getAMKA()).append("',")
                     .append("'").append(exam.getDiagnose()).append("',")
                     .append("'").append(exam.getExam_order()).append("',")
                     .append("'").append(exam.getPrescription()).append("',")
                     .append("'").append(exam.getReport()).append("',")
-                    .append("'").append(exam.getTherapy()).append("');");
+                    .append("'").append(exam.getTherapy()).append("',")
+                    .append("'").append(exam.getDate()).append("');");
 
             PreparedStatement stmtIns = con.prepareStatement(insQuery.toString());
             stmtIns.executeUpdate();
@@ -101,7 +197,6 @@ public class PatientDB {
         }
 
     }
-
 
     public static Patient getPatient(String doctor) throws ClassNotFoundException, SQLException {
         Patient patient = new Patient();
@@ -208,7 +303,6 @@ public class PatientDB {
         return;
     }
 
-
     public static void setTherapy(Examinations exam, String therapy) throws ClassNotFoundException, SQLException {
 
         Statement stmt = null;
@@ -239,8 +333,6 @@ public class PatientDB {
         return;
     }
 
-
-
     public static void setReportToPatient(Patient patient, String report) throws ClassNotFoundException, SQLException {
 
         Statement stmt = null;
@@ -270,7 +362,6 @@ public class PatientDB {
         }
         return;
     }
-
 
     public static void setDoctor(Patient patient, String doctor) throws ClassNotFoundException, SQLException {
 
@@ -342,6 +433,38 @@ public class PatientDB {
             con.close();
         }
         return patient;
+    }
+
+    public static void updatePatient(Patient patient) throws ClassNotFoundException, SQLException {
+
+        Statement stmt = null;
+        Connection con = null;
+
+        try {
+
+            con = TEPDB.getConnection();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("UPDATE patients SET diseases =").append("'").append(patient.getDiseases()).append("',")
+                    .append("selected_symptoms= ").append("'").append(patient.getSelectedSymptoms()).append("',")
+                    .append("symptoms= ").append("'").append(patient.getSymptoms()).append("',")
+                    .append("doctor= ").append("'").append(patient.getDoctor()).append("';");
+
+            System.out.println("patient updated " + patient);
+            System.out.println(patient.getSymptoms());
+            stmt.executeUpdate(insQuery.toString());
+            System.out.println("#DB: The patient was successfully updated in the database.");
+
+        } catch (SQLException ex) {
+            // Log exception
+            Logger.getLogger(UserTepDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // close connection
+            con.close();
+        }
+        return;
     }
 
     public static void insertPatient(Patient patient) throws ClassNotFoundException, SQLException {
@@ -445,7 +568,8 @@ public class PatientDB {
                     + " prescription VARCHAR(255), "
                     + " report VARCHAR(255), "
                     + " therapy VARCHAR(255), "
-                    + " PRIMARY KEY ( amka ))";
+                    + " date VARCHAR(255), "
+                    + " PRIMARY KEY ( date ))";
 
             stmt.executeUpdate(sql);
             System.out.println("Created examinations table in given database...");
